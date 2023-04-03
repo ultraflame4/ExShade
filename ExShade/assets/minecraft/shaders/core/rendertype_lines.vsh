@@ -11,22 +11,23 @@ uniform mat4 ProjMat;
 uniform float LineWidth;
 uniform vec2 ScreenSize;
 uniform int FogShape;
+uniform float GameTime;
 
 out float vertexDistance;
 out vec4 vertexColor;
 
 const float VIEW_SHRINK = 1.0 - (1.0 / 256.0);
 const mat4 VIEW_SCALE = mat4(
-    VIEW_SHRINK, 0.0, 0.0, 0.0,
-    0.0, VIEW_SHRINK, 0.0, 0.0,
-    0.0, 0.0, VIEW_SHRINK, 0.0,
-    0.0, 0.0, 0.0, 1.0
+VIEW_SHRINK, 0.0, 0.0, 0.0,
+0.0, VIEW_SHRINK, 0.0, 0.0,
+0.0, 0.0, VIEW_SHRINK, 0.0,
+0.0, 0.0, 0.0, 1.0
 );
 
 void main() {
     // Used to calculate the debug f3 menu xyz crosshair
-    vec4 linePosStart = ProjMat * VIEW_SCALE * ModelViewMat * vec4(Position, 1.0); // Starts at center of screen
-    vec4 linePosEnd = ProjMat * VIEW_SCALE * ModelViewMat * vec4(Position + Normal, 1.0); // End for the xyz axis lines. Normal is the axis direction
+    vec4 linePosStart = ProjMat * VIEW_SCALE * ModelViewMat * vec4(Position, 1.0);// Starts at center of screen
+    vec4 linePosEnd = ProjMat * VIEW_SCALE * ModelViewMat * vec4(Position + Normal, 1.0);// End for the xyz axis lines. Normal is the axis direction
 
 
     vec3 ndc1 = linePosStart.xyz / linePosStart.w;
@@ -47,4 +48,9 @@ void main() {
 
     vertexDistance = fog_distance(ModelViewMat, Position, FogShape);
     vertexColor = Color;
+    if (Position.x != 0.0 && Position.y != 0.0 && Position.z != 0.0){
+        float x = ((GameTime) * 2000 + Position.z) * 2;
+        vertexColor = vec4(sin(x)/2+0.5, sin(x+2)/2+0.5, sin(x+4)/2+0.5, 1);
+    }
+
 }
