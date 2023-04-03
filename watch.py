@@ -29,6 +29,7 @@ resolved_out = resolve_path(out_dir)/name
 class EventHandler(LoggingEventHandler):
 
     def on_modified(self, event):
+        super().on_modified(event)
         print("Change detected, copying...")
         sync(
             resolved_target,
@@ -36,9 +37,8 @@ class EventHandler(LoggingEventHandler):
             "sync",
             verbose=True,
             create=True,
+            purge=True
         )
-
-
 
 observer = Observer()
 observer.schedule(EventHandler(), resolved_target, recursive=True)
