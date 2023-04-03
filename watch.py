@@ -1,4 +1,5 @@
 import os.path
+import time
 from pathlib import Path
 from dirsync import sync
 from watchdog.observers import Observer
@@ -45,8 +46,8 @@ print(f"Watching {resolved_target} for changes...")
 print("Will copy changes to:", resolved_out,"\n")
 observer.start()
 try:
-    while observer.isAlive():
-        observer.join(1)
+    while True:
+        time.sleep(1)
 finally:
     observer.stop()
     observer.join()
