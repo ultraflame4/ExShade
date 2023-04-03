@@ -48,7 +48,8 @@ class EventHandler(LoggingEventHandler):
     def on_moved(self, event):
         super().on_moved(event)
         p = processPathChange(event.src_path, "Moved")
-        shutil.move(event.src_path, p)
+        if p.exists():
+            shutil.move(event.src_path, p)
 
     def on_created(self, event):
         super().on_created(event)
