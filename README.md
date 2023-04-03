@@ -1,6 +1,9 @@
 # ExShade
 Experimental resourcepack for experimenting with shaders in vanilla minecraft.
 
+## Features
+- Rainbow lines (hitbox, block outline, etc). 
+  - The xyz axis crosshair in the f3 menu still remains the same (filtered out).
 
 ## Development
 
