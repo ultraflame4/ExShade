@@ -26,10 +26,11 @@ resolved_target = resolve_path(target_path)
 resolved_out = resolve_path(out_dir) / name
 
 
-def processPathChange(s_path: str, change_name:str)->Path:
+def processPathChange(s_path: str, change_name:str, silence=False)->Path:
     rel = Path(s_path).relative_to(resolved_target)
     out_path = resolved_out / rel
-    print(f"({change_name}) Change detected, in...", s_path)
+    if not silence:
+        print(f"({change_name}) Change detected, in...", s_path)
     return out_path
 
 
@@ -38,22 +39,32 @@ class EventHandler(LoggingEventHandler):
     def on_modified(self, event):
         super().on_modified(event)
         p = processPathChange(event.src_path, "Modified")
+        if not p.exists():
+            os.makedirs(p.parent, exist_ok=True)
         shutil.copy(event.src_path, p)
 
     def on_deleted(self, event):
         super().on_deleted(event)
         p = processPathChange(event.src_path, "Deleted")
-        shutil.rmtree(p)
+        if p.exists():
+            os.remove(p)
 
     def on_moved(self, event):
         super().on_moved(event)
-        p = processPathChange(event.src_path, "Moved")
-        if p.exists():
-            shutil.move(event.src_path, p)
+        final = processPathChange(event.dest_path, "Moved")
+        prev = processPathChange(event.src_path, "Moved", silence=True)
+
+        if not prev.exists():
+            os.makedirs(prev.parent, exist_ok=True)
+            shutil.copy(event.dest_path, final)
+        else:
+            shutil.move(prev, final)
 
     def on_created(self, event):
         super().on_created(event)
         p = processPathChange(event.src_path, "Created")
+        if not p.exists():
+            os.makedirs(p.parent, exist_ok=True)
         shutil.copy(event.src_path, p)
 
 
