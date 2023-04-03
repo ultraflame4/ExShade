@@ -49,7 +49,7 @@ void main() {
     vertexDistance = fog_distance(ModelViewMat, Position, FogShape);
     vertexColor = Color;
     if (Position.x != 0.0 && Position.y != 0.0 && Position.z != 0.0){
-        float x = ((GameTime) * 2000 + Position.z) * 2;
+        float x = ((GameTime) * 1000 + Position.z) * 2;
         vertexColor = vec4(sin(x)/2+0.5, sin(x+2)/2+0.5, sin(x+4)/2+0.5, 1);
     }
 
