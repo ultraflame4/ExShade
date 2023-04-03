@@ -27,7 +27,7 @@ resolved_target = resolve_path(target_path)
 resolved_out = resolve_path(out_dir) / name
 
 
-def processPathChange(s_path: str, change_name:str, silence=False)->Path:
+def processPathChange(s_path: str, change_name: str, silence=False) -> Path:
     rel = Path(s_path).relative_to(resolved_target)
     out_path = resolved_out / rel
     if not silence:
@@ -35,22 +35,33 @@ def processPathChange(s_path: str, change_name:str, silence=False)->Path:
     return out_path
 
 
+def isFileIgnored(path: Path | str):
+    s = str(path)
+    return s.endswith("~") or s.endswith(".bak")
+
+
 class EventHandler(LoggingEventHandler):
 
     def on_modified(self, event):
+        if isFileIgnored(event.src_path): return
         super().on_modified(event)
+
         p = processPathChange(event.src_path, "Modified")
         if not p.exists():
             os.makedirs(p.parent, exist_ok=True)
         shutil.copy(event.src_path, p)
 
     def on_deleted(self, event):
+        if isFileIgnored(event.src_path): return
+
         super().on_deleted(event)
         p = processPathChange(event.src_path, "Deleted")
         if p.exists():
             os.remove(p)
 
     def on_moved(self, event):
+        if isFileIgnored(event.src_path): return
+
         super().on_moved(event)
         final = processPathChange(event.dest_path, "Moved")
         prev = processPathChange(event.src_path, "Moved", silence=True)
@@ -62,13 +73,13 @@ class EventHandler(LoggingEventHandler):
             shutil.move(prev, final)
 
     def on_created(self, event):
+        if isFileIgnored(event.src_path): return
+
         super().on_created(event)
         p = processPathChange(event.src_path, "Created")
         if not p.exists():
             os.makedirs(p.parent, exist_ok=True)
         shutil.copy(event.src_path, p)
-
-
 
 
 observer = PollingObserver()
