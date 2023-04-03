@@ -25,7 +25,7 @@ out vec4 normal;
 
 void main() {
     vec3 pos = Position + ChunkOffset;
-    pos = wobble_position(pos, 2, 4, GameTime);
+    pos = wobble_position(pos, GameTime);
 
     gl_Position = ProjMat * ModelViewMat * vec4(pos, 1.0);
 
@@ -38,3 +38,4 @@ void main() {
 
     normal = ProjMat * ModelViewMat * vec4(Normal, 0.0);
 }
+
