@@ -4,6 +4,7 @@ import time
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
+from watchdog.observers.polling import PollingObserver
 
 # CONFIG START--------------------
 
@@ -70,7 +71,7 @@ class EventHandler(LoggingEventHandler):
 
 
 
-observer = Observer()
+observer = PollingObserver()
 observer.schedule(EventHandler(), resolved_target, recursive=True)
 print(f"Watching {resolved_target} for changes...")
 print("Will copy changes to:", resolved_out, "\n")
