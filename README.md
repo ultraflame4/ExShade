@@ -7,8 +7,9 @@ Experimental resourcepack for experimenting with shaders in vanilla minecraft.
 ### Shader documentation
 Vanilla shaders are not officially supported and has no official documentation.
 
-However there are unofficial documentation available.
-1. https://github.com/McTsts/Minecraft-Shaders-Wiki/tree/main
+However there are unofficial documentation and resources available.
+1. Unofficial Documentation by McTsts: https://github.com/McTsts/Minecraft-Shaders-Wiki/tree/main
+2. Copy of the Default Shaders: https://github.com/misode/mcmeta/tree/assets/assets/minecraft/shaders
 
 ### Requirements.
 All requirements are in [requirements.txt](requirements.txt)
