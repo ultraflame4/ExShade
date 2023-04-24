@@ -33,6 +33,7 @@ and copies them to the minecraft resourcepack folder.
 
 Edit the values in the file to match your setup.
 
-
+## License
+**All rights reserved**
 
 
